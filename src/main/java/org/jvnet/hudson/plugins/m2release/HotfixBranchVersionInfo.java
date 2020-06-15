@@ -19,7 +19,10 @@
 package org.jvnet.hudson.plugins.m2release;
 
 import org.apache.maven.shared.release.versions.DefaultVersionInfo;
+import org.apache.maven.shared.release.versions.VersionInfo;
 import org.apache.maven.shared.release.versions.VersionParseException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Locale;
 import java.util.regex.Matcher;
@@ -30,14 +33,45 @@ import java.util.regex.Pattern;
  */
 public class HotfixBranchVersionInfo extends DefaultVersionInfo {
 
+    private transient Logger log = LoggerFactory.getLogger(HotfixBranchVersionInfo.class);
+
     public final static Pattern HOTFIX_BRANCH_NEXT_DEVELOPMENT_VERSION_PATTERN = Pattern.compile("(.*)(((-hotfix-)([1-9])(\\d*))(-SNAPSHOT))$");
+    private final static int MAJOR_MINOR_PATCH_QUALIFIER_JIRA_GROUP_NUM = 1;
+    private final static int HOTFIX_STR_GROUP_NUM = 4;
+    private final static int HOTFIX_VERSION_GROUP_NUM = 5;
+    private final static int SNAPSHOT_STR_GROUP_NUM = 7;
+
+    private Matcher matcher;
 
     public HotfixBranchVersionInfo(String version) throws VersionParseException {
         super(version);
-        Matcher matcher = HOTFIX_BRANCH_NEXT_DEVELOPMENT_VERSION_PATTERN.matcher(version);
+        matcher = HOTFIX_BRANCH_NEXT_DEVELOPMENT_VERSION_PATTERN.matcher(version);
         if (!matcher.matches()) {
             throw new VersionParseException(String.format(Locale.ENGLISH, "Next Development Version (%s) is not a valid version (it must end with \"%s\")",
                     version, matcher.pattern()));
         }
+    }
+
+    public VersionInfo getNextVersion() {
+        String majorMinorPatchQualifierJira = matcher.group(MAJOR_MINOR_PATCH_QUALIFIER_JIRA_GROUP_NUM);
+        String hotfixStr = matcher.group(HOTFIX_STR_GROUP_NUM);
+        String hotfixVersion = matcher.group(HOTFIX_VERSION_GROUP_NUM);
+        String snapshotStr = matcher.group(SNAPSHOT_STR_GROUP_NUM);
+        // Increment version
+        int numericalHotfixVersion = Integer.parseInt(hotfixVersion);
+        numericalHotfixVersion++;
+
+        StringBuilder nextDevelopmentVersion = new StringBuilder(majorMinorPatchQualifierJira);
+        nextDevelopmentVersion.append(hotfixStr);
+        nextDevelopmentVersion.append(numericalHotfixVersion);
+        nextDevelopmentVersion.append(snapshotStr);
+
+        VersionInfo versionInfo = null;
+        try {
+            versionInfo = new HotfixBranchVersionInfo(nextDevelopmentVersion.toString());
+        } catch (VersionParseException e) {
+            log.error("Cannot create a HotfixBranchVersionInfo instance", e);
+        }
+        return versionInfo;
     }
 }
