@@ -93,6 +93,7 @@ public class M2ReleaseAction implements PermalinkProjectAction {
 		}
 		this.isProduct = isProduct;
 		this.isForkedRepo = isForkedRepo;
+		this.isHotfixBranch = isHotfixBranch;
 		if (isProduct) {
 			nextDevelopmentVersionPattern = ProductVersionInfo.PRODUCT_NEXT_DEVELOPMENT_VERSION_PATTERN;
 		} else if (isForkedRepo) {
