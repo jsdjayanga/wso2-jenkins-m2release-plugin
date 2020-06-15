@@ -1,18 +1,18 @@
 /*
  * The MIT License
- * 
+ *
  * Copyright (c) 2009, NDS Group Ltd., James Nord, CloudBees, Inc.
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -76,8 +76,11 @@ public class M2ReleaseAction implements PermalinkProjectAction {
 	private boolean selectScmCredentials;
 	private boolean isProduct = false;
 	private boolean isForkedRepo = false;
+	private boolean isHotfixBranch = false;
 	private Pattern nextDevelopmentVersionPattern;
-	public M2ReleaseAction(MavenModuleSet project, boolean selectCustomScmCommentPrefix, boolean selectAppendHudsonUsername, boolean selectScmCredentials, boolean isProduct, boolean isForkedRepo) {
+	public M2ReleaseAction(MavenModuleSet project, boolean selectCustomScmCommentPrefix,
+						   boolean selectAppendHudsonUsername, boolean selectScmCredentials, boolean isProduct,
+						   boolean isForkedRepo, boolean isHotfixBranch) {
 
 		this.project = project;
 		this.selectCustomScmCommentPrefix = selectCustomScmCommentPrefix;
@@ -94,6 +97,8 @@ public class M2ReleaseAction implements PermalinkProjectAction {
 			nextDevelopmentVersionPattern = ProductVersionInfo.PRODUCT_NEXT_DEVELOPMENT_VERSION_PATTERN;
 		} else if (isForkedRepo) {
 			nextDevelopmentVersionPattern = ForkedRepoVersionInfo.FORKED_REPO_NEXT_DEVELOPMENT_VERSION_PATTERN;
+		} else if (isHotfixBranch) {
+			nextDevelopmentVersionPattern = HotfixBranchVersionInfo.HOTFIX_BRANCH_NEXT_DEVELOPMENT_VERSION_PATTERN;
 		} else {
 			nextDevelopmentVersionPattern = Pattern.compile(".*(-SNAPSHOT)$");
 		}
@@ -265,6 +270,8 @@ public class M2ReleaseAction implements PermalinkProjectAction {
 			dvi = new ProductVersionInfo(rootPomVersion);
 		} else if (isForkedRepo) {
 			dvi = new ForkedRepoVersionInfo(rootPomVersion);
+		} else if (isHotfixBranch) {
+			dvi = new HotfixBranchVersionInfo(rootPomVersion);
 		} else {
 			dvi = new DefaultVersionInfo(rootPomVersion);
 		}
