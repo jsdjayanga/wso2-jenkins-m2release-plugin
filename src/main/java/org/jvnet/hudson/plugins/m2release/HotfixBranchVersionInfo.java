@@ -35,11 +35,11 @@ public class HotfixBranchVersionInfo extends DefaultVersionInfo {
 
     private transient Logger log = LoggerFactory.getLogger(HotfixBranchVersionInfo.class);
 
-    public final static Pattern HOTFIX_BRANCH_NEXT_DEVELOPMENT_VERSION_PATTERN = Pattern.compile("(.*)(((-hotfix-)([1-9])(\\d*))(-SNAPSHOT))$");
+    public final static Pattern HOTFIX_BRANCH_NEXT_DEVELOPMENT_VERSION_PATTERN = Pattern.compile("(.*)(((-hotfix-)(\\d*))(-SNAPSHOT))$");
     private final static int MAJOR_MINOR_PATCH_QUALIFIER_JIRA_GROUP_NUM = 1;
     private final static int HOTFIX_STR_GROUP_NUM = 4;
     private final static int HOTFIX_VERSION_GROUP_NUM = 5;
-    private final static int SNAPSHOT_STR_GROUP_NUM = 7;
+    private final static int SNAPSHOT_STR_GROUP_NUM = 6;
 
     private Matcher matcher;
 
