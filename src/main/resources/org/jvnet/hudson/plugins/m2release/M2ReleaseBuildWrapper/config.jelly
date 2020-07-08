@@ -56,6 +56,9 @@
 	<f:entry title="Enforce 'Hotfix branch release' version format" help="/plugin/m2release/help-projectForked-repo.html">
     <f:checkbox name="isHotfixBranch" checked="${h.defaulted(instance.isHotfixBranch,descriptor.DEFAULT_IS_HOTFIX_BRANCH)}"/>
   </f:entry>
+  <f:entry title="Enforce Support Build" help="/plugin/m2release/help-projectForked-repo.html">
+    <f:checkbox name="isSupportBuild" checked="${h.defaulted(instance.isSupportBuild,descriptor.DEFAULT_IS_SUPPORT_BUILD)}"/>
+  </f:entry>
 
 	<f:advanced>
 		<f:entry title="Release environment variable" help="/plugin/m2release/help-projectConfig-releaseEnvVar.html">

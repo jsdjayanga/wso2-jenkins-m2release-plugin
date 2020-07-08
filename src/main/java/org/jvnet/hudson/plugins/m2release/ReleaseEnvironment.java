@@ -126,6 +126,11 @@ public class ReleaseEnvironment extends BuildWrapper.Environment {
             lstnr.getLogger().println("[WSO2 Maven Release] Not Releasing the Nexus repository. \"release:perform\" goal is not defined in build goals " + buildGoals);
             return true;
         }
+        if (m2ReleaseBuildWrapper.isSupportBuild) {
+            lstnr.getLogger().println("[WSO2 Maven Release] Not Releasing the Nexus repository as this a support " +
+                    "build");
+            return true;
+        }
         try {
             StageClient client = new StageClient(new URL(
                 m2ReleaseBuildWrapper.getDescriptor().getNexusURL()),

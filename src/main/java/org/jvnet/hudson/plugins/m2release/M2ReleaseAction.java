@@ -77,10 +77,11 @@ public class M2ReleaseAction implements PermalinkProjectAction {
 	private boolean isProduct = false;
 	private boolean isForkedRepo = false;
 	private boolean isHotfixBranch = false;
+	private boolean isSupportBuild = false;
 	private Pattern nextDevelopmentVersionPattern;
 	public M2ReleaseAction(MavenModuleSet project, boolean selectCustomScmCommentPrefix,
 						   boolean selectAppendHudsonUsername, boolean selectScmCredentials, boolean isProduct,
-						   boolean isForkedRepo, boolean isHotfixBranch) {
+						   boolean isForkedRepo, boolean isHotfixBranch, boolean isSupportBuild) {
 
 		this.project = project;
 		this.selectCustomScmCommentPrefix = selectCustomScmCommentPrefix;
@@ -94,6 +95,7 @@ public class M2ReleaseAction implements PermalinkProjectAction {
 		this.isProduct = isProduct;
 		this.isForkedRepo = isForkedRepo;
 		this.isHotfixBranch = isHotfixBranch;
+		this.isSupportBuild = isSupportBuild;
 		if (isProduct) {
 			nextDevelopmentVersionPattern = ProductVersionInfo.PRODUCT_NEXT_DEVELOPMENT_VERSION_PATTERN;
 		} else if (isForkedRepo) {
