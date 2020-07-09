@@ -53,6 +53,9 @@
 	<f:entry title="Enforce 'Forked repo wso2vX' version format" help="/plugin/m2release/help-projectForked-repo.html">
 		<f:checkbox name="isForkedRepo" checked="${h.defaulted(instance.isForkedRepo,descriptor.DEFAULT_IS_FORKED_REPO)}"/>
 	</f:entry>
+	<f:entry title="Enforce 'Forked support repo wso2vX.x' version format" help="/plugin/m2release/help-projectForked-repo.html">
+  		<f:checkbox name="isForkedSupportRepo" checked="${h.defaulted(instance.isForkedSupportRepo,descriptor.DEFAULT_IS_FORKED_REPO)}"/>
+  	</f:entry>
 	<f:entry title="Enforce 'Hotfix branch release' version format" help="/plugin/m2release/help-projectForked-repo.html">
     <f:checkbox name="isHotfixBranch" checked="${h.defaulted(instance.isHotfixBranch,descriptor.DEFAULT_IS_HOTFIX_BRANCH)}"/>
   </f:entry>

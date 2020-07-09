@@ -133,6 +133,7 @@ public class M2ReleaseBuildWrapper extends BuildWrapper {
 	public boolean                        isProduct                    = DescriptorImpl.DEFAULT_IS_PRODUCT;
 	public int                            numberOfReleaseBuildsToKeep  = DescriptorImpl.DEFAULT_NUMBER_OF_RELEASE_BUILDS_TO_KEEP;
 	public boolean                        isForkedRepo                 = DescriptorImpl.DEFAULT_IS_FORKED_REPO;
+	public boolean                        isForkedSupportRepo          = DescriptorImpl.DEFAULT_IS_FORKED_SUPPORT_REPO;
 	public boolean                        isHotfixBranch               = DescriptorImpl.DEFAULT_IS_HOTFIX_BRANCH;
 	public boolean                        isSupportBuild               = DescriptorImpl.DEFAULT_IS_SUPPORT_BUILD;
 
@@ -140,7 +141,7 @@ public class M2ReleaseBuildWrapper extends BuildWrapper {
 	public M2ReleaseBuildWrapper(String releaseGoals, String dryRunGoals, boolean selectCustomScmCommentPrefix, boolean selectAppendHudsonUsername,
 								 boolean selectScmCredentials, String releaseEnvVar, String scmUserEnvVar,
 								 String scmPasswordEnvVar, int numberOfReleaseBuildsToKeep, boolean isProduct,
-								 boolean isForkedRepo, boolean isHotfixBranch, boolean isSupportBuild) {
+								 boolean isForkedRepo, boolean isForkedSupportRepo, boolean isHotfixBranch, boolean isSupportBuild) {
 		super();
 		this.releaseGoals = releaseGoals;
 		this.dryRunGoals = dryRunGoals;
@@ -153,6 +154,7 @@ public class M2ReleaseBuildWrapper extends BuildWrapper {
 		this.numberOfReleaseBuildsToKeep = numberOfReleaseBuildsToKeep;
 		this.isProduct = isProduct;
 		this.isForkedRepo = isForkedRepo;
+		this.isForkedSupportRepo = isForkedSupportRepo;
 		this.isHotfixBranch = isHotfixBranch;
 		this.isSupportBuild = isSupportBuild;
 	}
@@ -224,6 +226,7 @@ public class M2ReleaseBuildWrapper extends BuildWrapper {
 		listener.getLogger().println("[WSO2 Maven Release]  Close Nexus Staging? " + args.isCloseNexusStage()); //global config
 		listener.getLogger().println("[WSO2 Maven Release] Is a Product Release: " + isProduct);
 		listener.getLogger().println("[WSO2 Maven Release] Is a Forked Repo Release: " + isForkedRepo);
+		listener.getLogger().println("[WSO2 Maven Release] Is a Forked Support Repo Release: " + isForkedSupportRepo);
 		listener.getLogger().println("[WSO2 Maven Release] Is a Hotfix Branch Release: " + isHotfixBranch);
 		listener.getLogger().println("[WSO2 Maven Release] Is a Support Build: " + isSupportBuild);
 
@@ -408,7 +411,7 @@ public class M2ReleaseBuildWrapper extends BuildWrapper {
 		}
 
 
-		M2ReleaseAction m2ReleaseAction = new M2ReleaseAction(mms, false, false, false, isProduct, isForkedRepo, isHotfixBranch, isSupportBuild);
+		M2ReleaseAction m2ReleaseAction = new M2ReleaseAction(mms, false, false, false, isProduct, isForkedRepo, isForkedSupportRepo, isHotfixBranch, isSupportBuild);
 		if (args.getDevelopmentVersion() == null) {
 			String nextDevelopmentVersion = m2ReleaseAction.computeNextVersion(rootPomVersion);
 			args.setDevelopmentVersion(nextDevelopmentVersion);
@@ -638,7 +641,7 @@ public class M2ReleaseBuildWrapper extends BuildWrapper {
 	@Override
 	public Action getProjectAction(@SuppressWarnings("rawtypes") AbstractProject job) {
 		return new M2ReleaseAction((MavenModuleSet) job, selectCustomScmCommentPrefix, selectAppendHudsonUsername,
-				selectScmCredentials, isProduct, isForkedRepo, isHotfixBranch, isSupportBuild);
+				selectScmCredentials, isProduct, isForkedRepo, isForkedSupportRepo, isHotfixBranch, isSupportBuild);
 	}
 
 	/**
@@ -735,6 +738,7 @@ public class M2ReleaseBuildWrapper extends BuildWrapper {
 		//Product release changes
 		public static final boolean DEFAULT_IS_PRODUCT = false;
 		public static final boolean DEFAULT_IS_FORKED_REPO = false;
+		public static final boolean DEFAULT_IS_FORKED_SUPPORT_REPO = false;
 		public static final boolean DEFAULT_IS_HOTFIX_BRANCH = false;
 		public static final boolean DEFAULT_IS_SUPPORT_BUILD = false;
 

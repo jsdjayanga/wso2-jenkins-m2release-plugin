@@ -76,12 +76,13 @@ public class M2ReleaseAction implements PermalinkProjectAction {
 	private boolean selectScmCredentials;
 	private boolean isProduct = false;
 	private boolean isForkedRepo = false;
+	private boolean isForkedSupportRepo = false;
 	private boolean isHotfixBranch = false;
 	private boolean isSupportBuild = false;
 	private Pattern nextDevelopmentVersionPattern;
 	public M2ReleaseAction(MavenModuleSet project, boolean selectCustomScmCommentPrefix,
 						   boolean selectAppendHudsonUsername, boolean selectScmCredentials, boolean isProduct,
-						   boolean isForkedRepo, boolean isHotfixBranch, boolean isSupportBuild) {
+						   boolean isForkedRepo, boolean isForkedSupportRepo, boolean isHotfixBranch, boolean isSupportBuild) {
 
 		this.project = project;
 		this.selectCustomScmCommentPrefix = selectCustomScmCommentPrefix;
@@ -94,12 +95,15 @@ public class M2ReleaseAction implements PermalinkProjectAction {
 		}
 		this.isProduct = isProduct;
 		this.isForkedRepo = isForkedRepo;
+		this.isForkedSupportRepo = isForkedSupportRepo;
 		this.isHotfixBranch = isHotfixBranch;
 		this.isSupportBuild = isSupportBuild;
 		if (isProduct) {
 			nextDevelopmentVersionPattern = ProductVersionInfo.PRODUCT_NEXT_DEVELOPMENT_VERSION_PATTERN;
 		} else if (isForkedRepo) {
 			nextDevelopmentVersionPattern = ForkedRepoVersionInfo.FORKED_REPO_NEXT_DEVELOPMENT_VERSION_PATTERN;
+		} else if (isForkedSupportRepo) {
+			nextDevelopmentVersionPattern = ForkedSupportRepoVersionInfo.FORKED_SUPPORT_REPO_NEXT_DEVELOPMENT_VERSION_PATTERN;
 		} else if (isHotfixBranch) {
 			nextDevelopmentVersionPattern = HotfixBranchVersionInfo.HOTFIX_BRANCH_NEXT_DEVELOPMENT_VERSION_PATTERN;
 		} else {
@@ -273,6 +277,8 @@ public class M2ReleaseAction implements PermalinkProjectAction {
 			dvi = new ProductVersionInfo(rootPomVersion);
 		} else if (isForkedRepo) {
 			dvi = new ForkedRepoVersionInfo(rootPomVersion);
+		} else if (isForkedSupportRepo) {
+			dvi = new ForkedSupportRepoVersionInfo(rootPomVersion);
 		} else if (isHotfixBranch) {
 			dvi = new HotfixBranchVersionInfo(rootPomVersion);
 		} else {
